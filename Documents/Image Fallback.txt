@@ -1,0 +1,11 @@
+Great job with your site improvement! I love your design and your use of fonts and colors. I also noticed that you included the WebP format and used the srcset attribute correctly. However, you have max-width: 400px and max-width: 401px, which means for any viewport width above 401px, it will fall back to the default img tag. You can fix this by using max-width for the smaller image and min-width for the larger image.
+
+Media Queries: The media queries are not overlapping logically. You have max-width: 400px and max-width: 401px, which means for any viewport width above 401px, it will fall back to the img tag. This might not be your intention if you want different images for different screen sizes.
+
+
+
+<picture>
+    <source srcset="images/hero-small.webp" media="(max-width: 400px)">
+    <source srcset="images/hero-large.webp" media="(min-width: 401px)">
+    <img src="images/hero-fallback.jpg" alt="St George, Utah temple" width="960" height="480">
+</picture>

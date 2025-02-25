@@ -1,0 +1,55 @@
+# Ignore .NET build artifacts
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userprefs
+
+# Ignore NuGet packages
+*.nupkg
+.nuget/
+nuget.exe
+
+# Ignore Visual Studio files
+.vs/
+*.sln
+*.csproj.user
+
+# Ignore other files
+*.log
+*.cache
+*.pidb
+*.pdb
+*.ilk
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+
+# Ignore local development files
+*.local
+*.DS_Store
+
+# Ignore ReSharper files
+_ReSharper.*
+*.ReSharper.*
+
+# Ignore Rider files
+.idea/
+*.sln.iml
+
+# Ignore macOS files
+.DS_Store
+
+# Ignore other directories
+packages/
+TestResults/
