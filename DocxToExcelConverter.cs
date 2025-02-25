@@ -1,7 +1,10 @@
-using Xceed.Words.NET;
 using System;
 using System.IO;
+using System.Text;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 public class DocxToExcelConverter : DocumentConverter
 {
@@ -10,18 +13,28 @@ public class DocxToExcelConverter : DocumentConverter
         Console.WriteLine($"Converting {inputPath} (DOCX) to {outputPath} (Excel)...");
         EnsureDirectoryExists(outputPath);
 
-        var docx = DocX.Load(inputPath);
         var workbook = new XSSFWorkbook();
         var sheet = workbook.CreateSheet("Converted Document");
 
-        int rowIndex = 0;
-        foreach (var paragraph in docx.Paragraphs)
+        // Open the document using Open XML SDK
+        using (WordprocessingDocument doc = WordprocessingDocument.Open(inputPath, false))
         {
-            if (!string.IsNullOrWhiteSpace(paragraph.Text))
+            var body = doc.MainDocumentPart?.Document?.Body;
+            if (body != null)
             {
-                var row = sheet.CreateRow(rowIndex++);
-                var cell = row.CreateCell(0);
-                cell.SetCellValue(paragraph.Text);
+                int rowIndex = 0;
+
+                // Extract paragraphs and add to Excel
+                foreach (var paragraph in body.Descendants<Paragraph>())
+                {
+                    string text = paragraph.InnerText;
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        var row = sheet.CreateRow(rowIndex++);
+                        var cell = row.CreateCell(0);
+                        cell.SetCellValue(text);
+                    }
+                }
             }
         }
 

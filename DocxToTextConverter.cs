@@ -1,7 +1,8 @@
-using Xceed.Words.NET;
 using System;
 using System.IO;
 using System.Text;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 public class DocxToTextConverter : DocumentConverter
 {
@@ -10,18 +11,28 @@ public class DocxToTextConverter : DocumentConverter
         Console.WriteLine($"Converting {inputPath} (DOCX) to {outputPath} (TXT)...");
         EnsureDirectoryExists(outputPath);
 
-        var docx = DocX.Load(inputPath);
+        StringBuilder txtBuilder = new StringBuilder();
         
-        StringBuilder text = new StringBuilder();
-        foreach (var paragraph in docx.Paragraphs)
+        // Open the document
+        using (WordprocessingDocument doc = WordprocessingDocument.Open(inputPath, false))
         {
-            if (!string.IsNullOrWhiteSpace(paragraph.Text))
+            var body = doc.MainDocumentPart?.Document?.Body;
+            if (body != null)
             {
-                text.AppendLine(paragraph.Text);
+                // Process paragraphs
+                foreach (var paragraph in body.Descendants<Paragraph>())
+                {
+                    string text = paragraph.InnerText;
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        txtBuilder.AppendLine(text);
+                    }
+                }
             }
         }
-
-        File.WriteAllText(outputPath, text.ToString());
+        
+        // Write to file
+        File.WriteAllText(outputPath, txtBuilder.ToString());
 
         Console.WriteLine("Conversion complete!");
     }

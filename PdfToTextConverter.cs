@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Text;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 public class PdfToTextConverter : DocumentConverter
 {
@@ -10,21 +12,23 @@ public class PdfToTextConverter : DocumentConverter
         Console.WriteLine($"Converting {inputPath} (PDF) to {outputPath} (TXT)...");
         EnsureDirectoryExists(outputPath);
 
+        StringBuilder textBuilder = new StringBuilder();
+
         using (PdfReader reader = new PdfReader(inputPath))
         {
             using (PdfDocument pdfDoc = new PdfDocument(reader))
             {
-                using (StreamWriter writer = new StreamWriter(outputPath))
+                for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
-                    for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
-                    {
-                        var page = pdfDoc.GetPage(i);
-                        var text = PdfTextExtractor.GetTextFromPage(page);
-                        writer.WriteLine(text);
-                    }
+                    ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+                    string text = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(i), strategy);
+                    textBuilder.AppendLine(text);
                 }
             }
         }
+
+        // Write to file
+        File.WriteAllText(outputPath, textBuilder.ToString());
 
         Console.WriteLine("Conversion complete!");
     }
