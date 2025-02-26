@@ -1,7 +1,7 @@
 # Overview
 ### Document Converter Application
 
-A C# application for converting documents between various formats, such as DOCX, PDF, HTML, and Excel. Built using .NET and libraries like `iText`, `DocX `, and `NPOI`.
+A C# application for converting documents between various formats, such as DOCX, PDF, HTML, and Excel. Built using .NET and libraries like iTextSharp, Open XML SDK, and NPOI.
 
 ## Demo
 [Software Demo Video](https://www.youtube.com/watch?v=your-video-id)
@@ -24,8 +24,8 @@ A C# application for converting documents between various formats, such as DOCX,
 3. **Install Required NuGet Packages**:
    - Install the necessary NuGet packages for the project:
      ```bash
-     dotnet add package iText7
-     dotnet add package DocX 
+     dotnet add package iTextSharp
+     dotnet add package DocumentFormat.OpenXml
      dotnet add package NPOI
      dotnet add package HtmlAgilityPack
      ```
@@ -74,8 +74,8 @@ The application supports the following conversions:
 ### Missing NuGet Packages
 If you encounter errors related to missing packages, ensure that all required NuGet packages are installed:
 ```bash
-dotnet add package iText7
-dotnet add package DocX 
+dotnet add package iTextSharp
+dotnet add package DocumentFormat.OpenXml
 dotnet add package NPOI
 dotnet add package HtmlAgilityPack
 ```
@@ -101,8 +101,8 @@ Ensure that the input and output file paths are correct and accessible. Use abso
 
 - **C#**: Primary programming language.
 - **.NET**: Framework for building the application.
-- **iText7**: Library for PDF manipulation.
-- **DocX **: Library for DOCX manipulation.
+- **iTextSharp**: Library for PDF manipulation.
+- **DocumentFormat.OpenXml**: Microsoft's library for working with Office documents.
 - **NPOI**: Library for Excel manipulation.
 - **HtmlAgilityPack**: Library for HTML parsing and manipulation.
 
@@ -122,8 +122,8 @@ Ensure that the input and output file paths are correct and accessible. Use abso
 ## Useful Websites
 
 - **.NET Documentation**: [https://docs.microsoft.com/en-us/dotnet/](https://docs.microsoft.com/en-us/dotnet/)
-- **iText7 Documentation**: [https://itextpdf.com/en](https://itextpdf.com/en)
-- **DocX  Documentation**: [https://xceed.com/xceed-words-for-net/](https://xceed.com/xceed-words-for-net/)
+- **iTextSharp Documentation**: [https://itextpdf.com/](https://itextpdf.com/)
+- **Open XML SDK Documentation**: [https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk](https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk)
 - **NPOI Documentation**: [https://github.com/nissl-lab/npoi](https://github.com/nissl-lab/npoi)
 - **HtmlAgilityPack Documentation**: [https://html-agility-pack.net/](https://html-agility-pack.net/)
 

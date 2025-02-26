@@ -1,8 +1,10 @@
-using Xceed.Words.NET;
 using System;
 using System.IO;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf; 
+using iText.Kernel.Pdf.Canvas.Parser; 
+using iText.Kernel.Pdf.Canvas.Parser.Listener; 
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 public class PdfToDocxConverter : DocumentConverter
 {
@@ -11,20 +13,37 @@ public class PdfToDocxConverter : DocumentConverter
         Console.WriteLine($"Converting {inputPath} (PDF) to {outputPath} (DOCX)...");
         EnsureDirectoryExists(outputPath);
 
-        using (PdfReader reader = new PdfReader(inputPath))
+        // Create Word document
+        using (WordprocessingDocument wordDoc = WordprocessingDocument.Create(outputPath, DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
         {
-            using (PdfDocument pdfDoc = new PdfDocument(reader))
+            // Add a main document part
+            MainDocumentPart mainPart = wordDoc.AddMainDocumentPart();
+            mainPart.Document = new Document();
+            Body body = new Body();
+            mainPart.Document.Append(body);
+
+            // Extract text from PDF using iText7
+            using (PdfReader reader = new PdfReader(inputPath))
             {
-                var docx = DocX.Create(outputPath);
-
-                for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+                using (PdfDocument pdfDoc = new PdfDocument(reader))
                 {
-                    var page = pdfDoc.GetPage(i);
-                    var text = PdfTextExtractor.GetTextFromPage(page); // Fix: Use PdfTextExtractor
-                    docx.InsertParagraph(text);
-                }
+                    for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+                    {
+                        ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+                        string text = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(i), strategy);
 
-                docx.Save();
+                        if (!string.IsNullOrWhiteSpace(text))
+                        {
+                            // Add extracted text to Word document
+                            Paragraph para = new Paragraph();
+                            Run run = new Run();
+                            Text txt = new Text(text);
+                            run.Append(txt);
+                            para.Append(run);
+                            body.Append(para);
+                        }
+                    }
+                }
             }
         }
 
