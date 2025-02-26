@@ -1,6 +1,5 @@
-﻿// Console.WriteLine("Hello, World!");
+﻿using System;
 
-using System;
 
 class Program
 {
@@ -34,6 +33,7 @@ class Program
 
     static void ShowUsage()
     {
+        Console.Clear();
         Console.WriteLine("Document Converter - Usage:");
         Console.WriteLine("  dotnet run <converter> <inputPath> <outputPath>");
         Console.WriteLine("\nAvailable converters:");
