@@ -1,41 +1,35 @@
-public class ConverterFactory
+using DocumentFormat.OpenXml.Spreadsheet;
+
+namespace ConverterLibrary
 {
-    public static DocumentConverter CreateConverter(string converterType)
+    public class ConverterFactory
     {
-        switch (converterType.ToLower())
-        {
-            // DOCX converters
-            case "docx2pdf":
-                return new DocxToPdfConverter();
-            case "docx2html":
-                return new DocxToHtmlConverter();
-            case "docx2txt":
-                return new DocxToTextConverter();
-            case "docx2excel":
-                return new DocxToExcelConverter();
-                
-            // PDF converters
-            case "pdf2docx":
-                return new PdfToDocxConverter();
-            case "pdf2html":
-                return new PdfToHtmlConverter();
-            case "pdf2txt":
-                return new PdfToTextConverter();
-                
-            // HTML converters
-            case "html2docx":
-                return new HtmlToDocxConverter();
-            case "html2pdf":
-                return new HtmlToPdfConverter();
-                
-            // Excel converters
-            case "excel2docx":
-                return new ExcelToDocxConverter();
-            case "excel2pdf":
-                return new ExcelToPdfConverter();
-                
-            default:
-                throw new ArgumentException($"Unsupported converter type: {converterType}");
-        }
+        public static DocumentConverter CreateConverter(string converterType) =>
+            converterType.ToLower() switch
+            {
+                // DOCX converters
+                "docx2pdf" => new DocxToPdfConverter(),
+                "docx2html" => new DocxToHtmlConverter(),
+                "docx2txt" => new DocxToTextConverter(),
+                "docx2excel" => new DocxToExcelConverter(),
+
+                // PDF converters
+                "pdf2docx" => new PdfToDocxConverter(),
+                // "pdf2html" => new PdfToHtmlConverter(),
+                "pdf2txt" => new PdfToTextConverter(),
+
+                // HTML converters
+                "html2docx" => new HtmlToDocxConverter(),
+
+                // Future improvements
+
+                // "html2pdf" => new HtmlToPdfConverter(),
+
+                // Excel converters
+                // "excel2docx" => new ExcelToDocxConverter(),
+                // "excel2pdf" => new ExcelToPdfConverter(),                
+
+                _ => throw new ArgumentException($"Unsupported converter type: {converterType}")
+            };
     }
 }

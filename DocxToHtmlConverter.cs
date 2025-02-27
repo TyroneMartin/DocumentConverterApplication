@@ -6,6 +6,8 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 public class DocxToHtmlConverter : DocumentConverter
 {
+    public override string ExpectedInputExtension => ".docx";
+    
     public override void Convert(string inputPath, string outputPath)
     {
         Console.WriteLine($"Converting {inputPath} (DOCX) to {outputPath} (HTML)...");
@@ -42,8 +44,6 @@ public class DocxToHtmlConverter : DocumentConverter
                 }
             }
         }
-        
-        // Close HTML
         htmlBuilder.AppendLine("</body>");
         htmlBuilder.AppendLine("</html>");
         

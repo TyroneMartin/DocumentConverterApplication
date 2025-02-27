@@ -8,6 +8,8 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 public class DocxToExcelConverter : DocumentConverter
 {
+    public override string ExpectedInputExtension => ".docx";
+    
     public override void Convert(string inputPath, string outputPath)
     {
         Console.WriteLine($"Converting {inputPath} (DOCX) to {outputPath} (Excel)...");
