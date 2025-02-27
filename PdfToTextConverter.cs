@@ -7,6 +7,8 @@ using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 public class PdfToTextConverter : DocumentConverter
 {
+    public override string ExpectedInputExtension => ".pdf";
+    
     public override void Convert(string inputPath, string outputPath)
     {
         Console.WriteLine($"Converting {inputPath} (PDF) to {outputPath} (TXT)...");

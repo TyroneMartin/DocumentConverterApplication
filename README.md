@@ -1,3 +1,4 @@
+
 # Overview
 ### Document Converter Application
 
@@ -10,7 +11,7 @@ A C# application for converting documents between various formats, such as DOCX,
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/document-converter-application.git
+   git clone https://github.com/TyroneMartin/DocumentConverterApplication
    cd document-converter-application
    ```
 
@@ -28,10 +29,12 @@ A C# application for converting documents between various formats, such as DOCX,
      dotnet add package DocumentFormat.OpenXml
      dotnet add package NPOI
      dotnet add package HtmlAgilityPack
+     dotnet add package itext7.bouncy-castle-adapter
      ```
 
 4. **Build the Project**:
-   - Build the project to ensure all dependencies are resolved:
+   - Build the project to ensure all dependencies are implemented correctly 🙂.
+
      ```bash
      dotnet build
      ```
@@ -48,7 +51,7 @@ A C# application for converting documents between various formats, such as DOCX,
 
 ## Available Converters
 
-The application supports the following conversions:
+The application currently supports the following conversions:
 
 - **DOCX Converters**:
   - `docx2pdf`: Convert DOCX to PDF.
@@ -58,16 +61,18 @@ The application supports the following conversions:
 
 - **PDF Converters**:
   - `pdf2docx`: Convert PDF to DOCX.
-  - `pdf2html`: Convert PDF to HTML.
   - `pdf2txt`: Convert PDF to plain text.
 
 - **HTML Converters**:
   - `html2docx`: Convert HTML to DOCX.
-  - `html2pdf`: Convert HTML to PDF.
 
-- **Excel Converters**:
-  - `excel2docx`: Convert Excel to DOCX.
-  - `excel2pdf`: Convert Excel to PDF.
+## Future Improvements
+
+The following converters are planned for future implementation:
+
+- **HTML to PDF**
+- **Excel to DOCX**
+- **Excel to PDF**
 
 ## Troubleshooting
 
@@ -78,6 +83,7 @@ dotnet add package iTextSharp
 dotnet add package DocumentFormat.OpenXml
 dotnet add package NPOI
 dotnet add package HtmlAgilityPack
+dotnet add package itext7.bouncy-castle-adapter
 ```
 
 ### Build Errors
@@ -108,16 +114,18 @@ Ensure that the input and output file paths are correct and accessible. Use abso
 
 ## Features
 
+- **File input and output**: Improve the user experience by specifying input and output file paths.
+- **Command-line interface**: Create a easy-to-use interface for running conversions.
 - **Multi-Format Support**: Convert between DOCX, PDF, HTML, and Excel formats.
 - **Flexible Conversion**: Supports both single and batch conversions.
-- **Error Handling**: Robust error handling for invalid inputs or unsupported formats.
+- **Error Handling**: Robust error handling for invalid inputs or unsupported formats,etc.
 - **Extensible Architecture**: Easily add new converters by extending the `DocumentConverter` base class.
 
 ## Requirements
 
 - **.NET SDK 6.0 or higher**: Required for building and running the application.
 - **NuGet**: For managing dependencies.
-- **Supported Formats**: Input files must be in a supported format (DOCX, PDF, HTML, Excel).
+- **Supported Formats**: `Please note:` Input files must be in a supported format (DOCX, PDF, HTML, Excel).
 
 ## Useful Websites
 

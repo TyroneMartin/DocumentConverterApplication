@@ -8,22 +8,16 @@ using iText.Layout;
 
 public class DocxToPdfConverter : DocumentConverter
 {
+    public override string ExpectedInputExtension => ".docx";
+    
     public override void Convert(string inputPath, string outputPath)
     {
         Console.WriteLine($"Converting {inputPath} (DOCX) to {outputPath} (PDF)...");
         
         try
         {
-            // Verify input file exists
-            if (!File.Exists(inputPath))
-            {
-                throw new FileNotFoundException($"Input file not found: {inputPath}");
-            }
-            
-            // Ensure output directory exists
             EnsureDirectoryExists(outputPath);
             
-            // First extract text content from DOCX
             StringBuilder contentBuilder = new StringBuilder();
             
             using (WordprocessingDocument doc = WordprocessingDocument.Open(inputPath, false))
@@ -35,7 +29,7 @@ public class DocxToPdfConverter : DocumentConverter
                 
                 var body = doc.MainDocumentPart.Document.Body;
                 
-                // Process paragraphs - use fully qualified name to avoid ambiguity
+                // Process paragraphs
                 foreach (var paragraph in body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
                 {
                     string text = paragraph.InnerText;
@@ -46,7 +40,6 @@ public class DocxToPdfConverter : DocumentConverter
                 }
             }
             
-            // Now create PDF with extracted content
             using (PdfWriter writer = new PdfWriter(outputPath))
             {
                 using (PdfDocument pdfDoc = new PdfDocument(writer))
@@ -61,7 +54,6 @@ public class DocxToPdfConverter : DocumentConverter
                         
                         foreach (string line in lines)
                         {
-                            // Use fully qualified name for iText Paragraph
                             document.Add(new iText.Layout.Element.Paragraph(line));
                         }
                     }
