@@ -86,6 +86,14 @@ dotnet add package HtmlAgilityPack
 dotnet add package itext7.bouncy-castle-adapter
 ```
 
+Here’s the corrected version:  
+
+### To Start  
+To start the application, you can press the play button or run the following command in the terminal:  
+```bash
+dotnet run
+```
+
 ### Build Errors
 If the build fails, clean and rebuild the project:
 ```bash

@@ -1,0 +1,41 @@
+@model DocumentConverterApplication.Controllers.ConverterViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container my-5">
+    <!-- Welcome Section -->
+    @if (Model.ConversionResult == null)
+    {
+        <div class="text-center mb-5">
+            <h1 class="display-4">Welcome to Document Converter</h1>
+            <p class="lead">Convert your documents between various formats with ease</p>
+            <hr class="my-4">
+        </div>
+    }
+
+    <!-- Rest of your existing Index.cshtml file content stays the same -->
+</div>
+
+@section Scripts {
+    <script>
+        // Update file type help text based on selected converter
+        document.getElementById('conversionSelect').addEventListener('change', function() {
+            const converter = this.value;
+            const helpText = document.getElementById('fileTypeHelp');
+
+            if (converter.startsWith('docx')) {
+                helpText.textContent = 'Please upload a .docx file';
+            } else if (converter.startsWith('pdf')) {
+                helpText.textContent = 'Please upload a .pdf file';
+            } else if (converter.startsWith('html')) {
+                helpText.textContent = 'Please upload a .html file';
+            } else if (converter.startsWith('excel')) {
+                helpText.textContent = 'Please upload an Excel file (.xlsx)';
+            } else {
+                helpText.textContent = 'Please upload a file that matches your selected conversion';
+            }
+        });
+    </script>
+}
