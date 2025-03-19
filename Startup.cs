@@ -5,8 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DocumentConverterWebApp.Services;
 
-namespace DocumentConverterApplication
-{
+namespace DocumentConverterWebApp{
     public class Startup
     {
         public Startup(IConfiguration configuration)

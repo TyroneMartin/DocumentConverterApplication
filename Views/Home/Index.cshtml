@@ -1,0 +1,141 @@
+@model DocumentConverterWebApp.Models.ConverterViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container my-5">
+    <!-- Welcome Section -->
+    @if (Model.ConversionResult == null)
+    {
+        <div class="text-center mb-5">
+            <h1 class="display-4">Welcome to Document Converter</h1>
+            <p class="lead">Convert your documents between various formats with ease</p>
+            <hr class="my-4">
+        </div>
+    }
+
+    <div class="row">
+        <!-- Converter Selection + File Upload Form -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Convert Your Document</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ConvertDocument" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Converter Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">1. Select Conversion Type</label>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select asp-for="SelectedConverter" class="form-select" id="conversionSelect">
+                                        <option value="">Select conversion...</option>
+                                        @foreach (var category in Model.AvailableConverters)
+                                        {
+                                            <optgroup label="@category.Key">
+                                                @foreach (var converter in category.Value)
+                                                {
+                                                    <option value="@converter">@converter</option>
+                                                }
+                                            </optgroup>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="SelectedConverter" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="mb-4">
+                            <label class="form-label">2. Upload Your Document</label>
+                            <div class="input-group">
+                                <input type="file" asp-for="UploadedFile" class="form-control" id="fileUpload">
+                                <span asp-validation-for="UploadedFile" class="text-danger"></span>
+                            </div>
+                            <div class="form-text" id="fileTypeHelp">
+                                Please upload a file that matches your selected conversion.
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-arrow-repeat"></i> Convert Document
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion Result Section -->
+        <div class="col-md-6">
+            @if (Model.ConversionResult != null && Model.ConversionResult.Success)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Conversion Successful</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6>Input File:</h6>
+                            <p class="mb-1">@Model.ConversionResult.InputFileName</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Output File:</h6>
+                            <p class="mb-1">@Model.ConversionResult.OutputFileName</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Conversion Type:</h6>
+                            <p class="mb-1">@Model.ConversionResult.ConverterType</p>
+                        </div>
+                        <div class="text-center">
+                            <a asp-action="Download" asp-route-filePath="@Model.ConversionResult.OutputFilePath"
+                                asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
+                                <i class="bi bi-download"></i> Download Converted File
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (!Model.IsModelStateValid)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Conversion Failed</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger">
+                            Please check the form and try again.
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Update file type help text based on selected converter
+        document.getElementById('conversionSelect').addEventListener('change', function () {
+            const converter = this.value;
+            const helpText = document.getElementById('fileTypeHelp');
+
+            if (converter.startsWith('docx')) {
+                helpText.textContent = 'Please upload a .docx file';
+            } else if (converter.startsWith('pdf')) {
+                helpText.textContent = 'Please upload a .pdf file';
+            } else if (converter.startsWith('html')) {
+                helpText.textContent = 'Please upload a .html file';
+            } else if (converter.startsWith('excel')) {
+                helpText.textContent = 'Please upload an Excel file (.xlsx)';
+            } else {
+                helpText.textContent = 'Please upload a file that matches your selected conversion';
+            }
+        });
+    </script>
+}
