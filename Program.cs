@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DocumentConverterWebApp{
+namespace DocumentConverterApplication{
     public class Program
     {
         public static void Main(string[] args)

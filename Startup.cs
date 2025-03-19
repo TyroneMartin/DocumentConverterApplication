@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DocumentConverterWebApp.Services;
+using DocumentConverterApplication.Services;
 
-namespace DocumentConverterWebApp{
+namespace DocumentConverterApplication{
     public class Startup
     {
         public Startup(IConfiguration configuration)

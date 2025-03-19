@@ -1,5 +1,4 @@
-@model DocumentConverterWebApp.Models.ConverterViewModel
-
+@model DocumentConverterApplication.Models.ConverterViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -12,6 +11,21 @@
             <h1 class="display-4">Welcome to Document Converter</h1>
             <p class="lead">Convert your documents between various formats with ease</p>
             <hr class="my-4">
+        </div>
+    }
+
+    <!-- Display conversion failure message if ModelState is invalid -->
+    @if (!Model.IsModelStateValid)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Conversion Failed</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    Please check the form and try again.
+                </div>
+            </div>
         </div>
     }
 
@@ -94,7 +108,7 @@
                         </div>
                         <div class="text-center">
                             <a asp-action="Download" asp-route-filePath="@Model.ConversionResult.OutputFilePath"
-                                asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
+                               asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
                                 <i class="bi bi-download"></i> Download Converted File
                             </a>
                         </div>

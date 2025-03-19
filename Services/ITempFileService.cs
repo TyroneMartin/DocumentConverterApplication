@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace DocumentConverterWebApp.Services
+namespace DocumentConverterApplication.Services
 {
     public interface ITempFileService
     {

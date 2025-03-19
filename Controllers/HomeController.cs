@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using DocumentConverterApplication.Models; 
 
 namespace DocumentConverterApplication.Controllers
 {
@@ -21,21 +22,15 @@ namespace DocumentConverterApplication.Controllers
             };
             return View(model);
         }
+        
         [HttpPost]
-        public async Task<IActionResult> ConvertDocument(ConverterViewModel model)
+        public IActionResult ConvertDocument(ConverterViewModel model)
         {
             if (!ModelState.IsValid || model.UploadedFile == null || string.IsNullOrEmpty(model.SelectedConverter))
             {
-                model.IsModelStateValid = false;
+                model.IsModelStateValid = false; // Mark model as invalid
                 return View("Index", model);
             }
-
-            // Add real async operation - for example if you're processing the file
-            await Task.Run(() =>
-            {
-                // Simulate file processing work
-                System.Threading.Thread.Sleep(100);
-            });
 
             // Simulate conversion process
             var inputFileName = Path.GetFileName(model.UploadedFile.FileName);
