@@ -46,8 +46,9 @@
                     <h5 class="mb-0">Convert Your Document</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Standard POST form (no extra JS needed) -->
-                    <form id="conversionForm" asp-action="ConvertDocument" method="post" enctype="multipart/form-data">
+                    
+                    <form id="conversionForm" asp-controller="Home" asp-action="ConvertDocument" method="post"
+                        enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <!-- Converter Selection -->

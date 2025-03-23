@@ -35,34 +35,38 @@ namespace DocumentConverterApplication.Controllers
         [HttpPost]
         public IActionResult ConvertDocument(ConverterViewModel model)
         {
+            Console.WriteLine("ConvertDocument action invoked.");
+
             if (!ModelState.IsValid || model.UploadedFile == null || string.IsNullOrEmpty(model.SelectedConverter))
             {
+                Console.WriteLine("Model state invalid or missing file/selection.");
                 model.IsModelStateValid = false;
                 return View("Index", model);
             }
-            
-            // Use the injected _tempFileService to get the temp directory.
+
             var tempDir = _tempFileService.GetTempDirectory();
             var inputFileName = Path.GetFileName(model.UploadedFile.FileName);
             var tempInputPath = Path.Combine(tempDir, Guid.NewGuid() + Path.GetExtension(inputFileName));
-            
+
+            Console.WriteLine($"Saving uploaded file to temporary path: {tempInputPath}");
             using (var stream = new FileStream(tempInputPath, FileMode.Create))
             {
                 model.UploadedFile.CopyTo(stream);
             }
-            
-            // Determine output file path
+
             var outputFileName = "converted_" + inputFileName;
             var outputPath = Path.Combine("wwwroot", "downloads", outputFileName);
-            
+            Console.WriteLine($"Output file will be: {outputPath}");
+
             try
             {
-                // Create and invoke the appropriate converter.
                 var converter = ConverterLibrary.ConverterFactory.CreateConverter(
                     model.SelectedConverter.Replace(" ", "").ToLower()
                 );
+                Console.WriteLine($"Converter selected: {converter.GetType().Name}");
                 converter.ConvertWithValidation(tempInputPath, outputPath);
-                
+                Console.WriteLine("Conversion succeeded.");
+
                 model.ConversionResult = new ConversionResult
                 {
                     Success = true,
@@ -74,14 +78,16 @@ namespace DocumentConverterApplication.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Conversion failed: {ex.Message}");
                 model.ConversionResult = new ConversionResult
                 {
                     Success = false,
                     ErrorMessage = $"Conversion failed: {ex.Message}"
                 };
             }
-            
+
             return View("Index", model);
         }
+
     }
 }
