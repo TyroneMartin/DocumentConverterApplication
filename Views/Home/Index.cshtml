@@ -4,8 +4,9 @@
 }
 
 <div class="container my-5">
-    <!-- Welcome Section -->
-    @if (Model.ConversionResult == null)
+
+    <!-- Show a single welcome heading if there is no conversion result -->
+    @if (Model.ConversionResult == null && Model.IsModelStateValid)
     {
         <div class="text-center mb-5">
             <h1 class="display-4">Welcome to Document Converter</h1>
@@ -14,8 +15,9 @@
         </div>
     }
 
-    <!-- Display conversion failure message if ModelState is invalid -->
-    @if (!Model.IsModelStateValid)
+    <!-- Show an error card if there's a validation or conversion issue -->
+    @if (!Model.IsModelStateValid ||
+        (Model.ConversionResult != null && !Model.ConversionResult.Success))
     {
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-danger text-white">
@@ -23,7 +25,14 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-danger">
-                    Please check the form and try again.
+                    @if (!Model.IsModelStateValid)
+                    {
+                        <p>Please check the form and try again.</p>
+                    }
+                    else
+                    {
+                        <p>@Model.ConversionResult?.ErrorMessage</p>
+                    }
                 </div>
             </div>
         </div>
@@ -37,7 +46,8 @@
                     <h5 class="mb-0">Convert Your Document</h5>
                 </div>
                 <div class="card-body">
-                    <form asp-action="ConvertDocument" method="post" enctype="multipart/form-data">
+                    <!-- Standard POST form (no extra JS needed) -->
+                    <form id="conversionForm" asp-action="ConvertDocument" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <!-- Converter Selection -->
@@ -64,11 +74,15 @@
 
                         <!-- File Upload -->
                         <div class="mb-4">
-                            <label class="form-label">2. Upload Your Document</label>
-                            <div class="input-group">
+
+
+
+                            <label class="form-label">
+                                2. Upload Your Document
                                 <input type="file" asp-for="UploadedFile" class="form-control" id="fileUpload">
-                                <span asp-validation-for="UploadedFile" class="text-danger"></span>
-                            </div>
+                            </label>
+
+
                             <div class="form-text" id="fileTypeHelp">
                                 Please upload a file that matches your selected conversion.
                             </div>
@@ -76,7 +90,7 @@
 
                         <!-- Submit Button -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" id="convertButton">
                                 <i class="bi bi-arrow-repeat"></i> Convert Document
                             </button>
                         </div>
@@ -108,22 +122,9 @@
                         </div>
                         <div class="text-center">
                             <a asp-action="Download" asp-route-filePath="@Model.ConversionResult.OutputFilePath"
-                               asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
+                                asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
                                 <i class="bi bi-download"></i> Download Converted File
                             </a>
-                        </div>
-                    </div>
-                </div>
-            }
-            else if (!Model.IsModelStateValid)
-            {
-                <div class="card shadow-sm">
-                    <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0">Conversion Failed</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-danger">
-                            Please check the form and try again.
                         </div>
                     </div>
                 </div>
@@ -134,21 +135,52 @@
 
 @section Scripts {
     <script>
-        // Update file type help text based on selected converter
+        // Change help text based on selected converter
         document.getElementById('conversionSelect').addEventListener('change', function () {
-            const converter = this.value;
+            const converter = this.value.toLowerCase();
             const helpText = document.getElementById('fileTypeHelp');
 
-            if (converter.startsWith('docx')) {
+            if (converter.includes('docx')) {
                 helpText.textContent = 'Please upload a .docx file';
-            } else if (converter.startsWith('pdf')) {
+            } else if (converter.includes('pdf')) {
                 helpText.textContent = 'Please upload a .pdf file';
-            } else if (converter.startsWith('html')) {
+            } else if (converter.includes('html')) {
                 helpText.textContent = 'Please upload a .html file';
-            } else if (converter.startsWith('excel')) {
-                helpText.textContent = 'Please upload an Excel file (.xlsx)';
+            } else if (converter.includes('excel') || converter.includes('xlsx')) {
+                helpText.textContent = 'Please upload an Excel (.xlsx) file';
+            } else if (converter.includes('csv')) {
+                helpText.textContent = 'Please upload a .csv file';
             } else {
                 helpText.textContent = 'Please upload a file that matches your selected conversion';
+            }
+        });
+
+        // Client-side format check before submitting
+        document.getElementById('conversionForm').addEventListener('submit', function (event) {
+            const converterValue = document.getElementById('conversionSelect').value.toLowerCase();
+            const fileInput = document.getElementById('fileUpload');
+            const filePath = fileInput.value.toLowerCase();
+
+            // If there's no file or no converter, let server handle it
+            if (!filePath || !converterValue) return;
+
+            // Simple extension check
+            let requiredExt = '';
+            if (converterValue.includes('docx')) {
+                requiredExt = '.docx';
+            } else if (converterValue.includes('pdf')) {
+                requiredExt = '.pdf';
+            } else if (converterValue.includes('html')) {
+                requiredExt = '.html';
+            } else if (converterValue.includes('excel') || converterValue.includes('xlsx')) {
+                requiredExt = '.xlsx';
+            } else if (converterValue.includes('csv')) {
+                requiredExt = '.csv';
+            }
+
+            if (requiredExt && !filePath.endsWith(requiredExt)) {
+                event.preventDefault();
+                alert(`Error: Please upload a file with the '${requiredExt}' extension for this conversion type.`);
             }
         });
     </script>

@@ -86,7 +86,7 @@ namespace DocumentConverterApplication.Services
             try
             {
                 var cutoffTime = DateTime.Now - olderThan;
-                
+
                 // Clean files in the main temp directory
                 if (Directory.Exists(_tempDir))
                 {
