@@ -46,9 +46,10 @@
                     <h5 class="mb-0">Convert Your Document</h5>
                 </div>
                 <div class="card-body">
-                    
-                    <form id="conversionForm" asp-controller="Home" asp-action="ConvertDocument" method="post"
-                        enctype="multipart/form-data">
+
+                    <form id="conversionForm" action="/Home/ConvertDocument" method="post"
+                        enctype="multipart/form-data"> enctype="multipart/form-data">
+                        
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <!-- Converter Selection -->
@@ -76,12 +77,14 @@
                         <!-- File Upload -->
                         <div class="mb-4">
 
-
-
+                            @* 
                             <label class="form-label">
                                 2. Upload Your Document
                                 <input type="file" asp-for="UploadedFile" class="form-control" id="fileUpload">
-                            </label>
+                            </label> *@
+
+                            <label for="fileUpload" class="form-label">2. Upload Your Document</label>
+                            <input type="file" asp-for="UploadedFile" class="form-control" id="fileUpload">
 
 
                             <div class="form-text" id="fileTypeHelp">
@@ -122,8 +125,8 @@
                             <p class="mb-1">@Model.ConversionResult.ConverterType</p>
                         </div>
                         <div class="text-center">
-                            <a asp-action="Download" asp-route-filePath="@Model.ConversionResult.OutputFilePath"
-                                asp-route-fileName="@Model.ConversionResult.OutputFileName" class="btn btn-success">
+                            <a asp-action="Download" asp-route-fileName="@Model.ConversionResult.OutputFileName"
+                                class="btn btn-success">
                                 <i class="bi bi-download"></i> Download Converted File
                             </a>
                         </div>

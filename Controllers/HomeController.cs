@@ -55,8 +55,17 @@ namespace DocumentConverterApplication.Controllers
             }
 
             var outputFileName = "converted_" + inputFileName;
-            var outputPath = Path.Combine("wwwroot", "downloads", outputFileName);
-            Console.WriteLine($"Output file will be: {outputPath}");
+            var downloadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "downloads");
+            
+            // Ensure the downloads directory exists
+            if (!Directory.Exists(downloadsDir))
+            {
+                Console.WriteLine($"Creating downloads directory: {downloadsDir}");
+                Directory.CreateDirectory(downloadsDir);
+            }
+            
+            var outputPath = Path.Combine(downloadsDir, outputFileName);
+            Console.WriteLine($"Absolute output path: {Path.GetFullPath(outputPath)}");
 
             try
             {
@@ -65,6 +74,14 @@ namespace DocumentConverterApplication.Controllers
                 );
                 Console.WriteLine($"Converter selected: {converter.GetType().Name}");
                 converter.ConvertWithValidation(tempInputPath, outputPath);
+                
+                // Verify the file was created
+                if (!System.IO.File.Exists(outputPath))
+                {
+                    throw new FileNotFoundException($"Converter didn't create output file at {outputPath}");
+                }
+                
+                Console.WriteLine($"File exists after conversion: {System.IO.File.Exists(outputPath)}");
                 Console.WriteLine("Conversion succeeded.");
 
                 model.ConversionResult = new ConversionResult
@@ -85,9 +102,57 @@ namespace DocumentConverterApplication.Controllers
                     ErrorMessage = $"Conversion failed: {ex.Message}"
                 };
             }
+            finally
+            {
+                // Clean up the temporary input file
+                try
+                {
+                    if (System.IO.File.Exists(tempInputPath))
+                    {
+                        System.IO.File.Delete(tempInputPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error cleaning up temp file: {ex.Message}");
+                }
+            }
 
             return View("Index", model);
         }
-
+        
+        [HttpGet]
+        public IActionResult Download(string fileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "downloads", fileName);
+            
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound($"File not found: {fileName}");
+            }
+            
+            // Determine content type based on file extension
+            var contentType = "application/octet-stream"; // Default
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            
+            switch (extension)
+            {
+                case ".pdf":
+                    contentType = "application/pdf";
+                    break;
+                case ".docx":
+                    contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    break;
+                case ".xlsx":
+                    contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    break;
+                case ".txt":
+                    contentType = "text/plain";
+                    break;
+            }
+            
+            // Return file with the physical path
+            return PhysicalFile(filePath, contentType, fileName);
+        }
     }
 }
