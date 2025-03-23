@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DocumentConverterApplication.Services;
+using Microsoft.AspNetCore.Http.Features;
 
-namespace DocumentConverterApplication{
+namespace DocumentConverterApplication
+{
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -17,8 +19,20 @@ namespace DocumentConverterApplication{
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(); // Add support for MVC
-            services.AddScoped<ITempFileService, TempFileService>(); // Register your service
+            // Increase the file upload size limit
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
+            });
+
+            // Add logging
+            services.AddLogging();
+
+            // Add support for MVC
+            services.AddControllersWithViews();
+
+            // Register your services
+            services.AddScoped<ITempFileService, TempFileService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

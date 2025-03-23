@@ -44,6 +44,9 @@ namespace DocumentConverterApplication.Controllers
                 return View("Index", model);
             }
 
+            Console.WriteLine($"Selected converter: {model.SelectedConverter}");
+            
+
             var tempDir = _tempFileService.GetTempDirectory();
             var inputFileName = Path.GetFileName(model.UploadedFile.FileName);
             var tempInputPath = Path.Combine(tempDir, Guid.NewGuid() + Path.GetExtension(inputFileName));
@@ -56,14 +59,14 @@ namespace DocumentConverterApplication.Controllers
 
             var outputFileName = "converted_" + inputFileName;
             var downloadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "downloads");
-            
+
             // Ensure the downloads directory exists
             if (!Directory.Exists(downloadsDir))
             {
                 Console.WriteLine($"Creating downloads directory: {downloadsDir}");
                 Directory.CreateDirectory(downloadsDir);
             }
-            
+
             var outputPath = Path.Combine(downloadsDir, outputFileName);
             Console.WriteLine($"Absolute output path: {Path.GetFullPath(outputPath)}");
 
@@ -74,13 +77,13 @@ namespace DocumentConverterApplication.Controllers
                 );
                 Console.WriteLine($"Converter selected: {converter.GetType().Name}");
                 converter.ConvertWithValidation(tempInputPath, outputPath);
-                
+
                 // Verify the file was created
                 if (!System.IO.File.Exists(outputPath))
                 {
                     throw new FileNotFoundException($"Converter didn't create output file at {outputPath}");
                 }
-                
+
                 Console.WriteLine($"File exists after conversion: {System.IO.File.Exists(outputPath)}");
                 Console.WriteLine("Conversion succeeded.");
 
@@ -120,21 +123,21 @@ namespace DocumentConverterApplication.Controllers
 
             return View("Index", model);
         }
-        
+
         [HttpGet]
         public IActionResult Download(string fileName)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "downloads", fileName);
-            
+
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound($"File not found: {fileName}");
             }
-            
+
             // Determine content type based on file extension
             var contentType = "application/octet-stream"; // Default
             var extension = Path.GetExtension(fileName).ToLowerInvariant();
-            
+
             switch (extension)
             {
                 case ".pdf":
@@ -150,7 +153,7 @@ namespace DocumentConverterApplication.Controllers
                     contentType = "text/plain";
                     break;
             }
-            
+
             // Return file with the physical path
             return PhysicalFile(filePath, contentType, fileName);
         }
