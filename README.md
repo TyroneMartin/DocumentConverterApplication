@@ -1,150 +1,161 @@
+Below is an updated README.md tailored for your ASP.NET Core document converter web‑app. It details the web‑focused workflow, the technologies used, setup instructions, troubleshooting tips, and useful reference links.
 
-# Overview
-### Document Converter Application
+---
 
-A C# application for converting documents between various formats, such as DOCX, PDF, HTML, and Excel. Built using .NET and libraries like iTextSharp, Open XML SDK, and NPOI.
+```markdown
+# Document Converter Web Application
 
-## Demo
-[Software Demo Video](https://youtu.be/WVFQVa-WqDo)
+A web‑based application built with ASP.NET Core for converting documents between various formats—such as DOCX, PDF, HTML, and Excel. The application leverages powerful libraries like iTextSharp, Open XML SDK, NPOI, and HtmlAgilityPack on the server side, while also providing a modern web interface for file uploads and downloads.
 
-## Setup
+## Overview
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/TyroneMartin/DocumentConverterApplication
-   cd document-converter-application
-   ```
+The Document Converter Web Application allows users to upload files via their browser, have them converted on the server, and then download the converted output. The application supports conversions including:
 
-2. **Install .NET SDK**:
-   - Download and install the .NET SDK from [.NET Downloads](https://dotnet.microsoft.com/download).
-   - Verify installation by running:
-     ```bash
-     dotnet --version
-     ```
-
-3. **Install Required NuGet Packages**:
-   - Install the necessary NuGet packages for the project:
-     ```bash
-     dotnet add package iTextSharp
-     dotnet add package DocumentFormat.OpenXml
-     dotnet add package NPOI
-     dotnet add package HtmlAgilityPack
-     dotnet add package itext7.bouncy-castle-adapter
-     ```
-
-4. **Build the Project**:
-   - Build the project to ensure all dependencies are implemented correctly 🙂.
-
-     ```bash
-     dotnet build
-     ```
-
-5. **Run the Application**:
-   - Run the application with the appropriate arguments for conversion:
-     ```bash
-     dotnet run <converter> <inputPath> <outputPath>
-     ```
-   - Example:
-     ```bash
-     dotnet run docx2pdf document.docx output.pdf
-     ```
-
-## Available Converters
-
-The application currently supports the following conversions:
-
-- **DOCX Converters**:
+- **DOCX Converters:**
   - `docx2pdf`: Convert DOCX to PDF.
   - `docx2html`: Convert DOCX to HTML.
   - `docx2txt`: Convert DOCX to plain text.
   - `docx2excel`: Convert DOCX to Excel.
 
-- **PDF Converters**:
+- **PDF Converters:**
   - `pdf2docx`: Convert PDF to DOCX.
   - `pdf2txt`: Convert PDF to plain text.
 
-- **HTML Converters**:
+- **HTML Converters:**
   - `html2docx`: Convert HTML to DOCX.
 
-## Future Improvements
+Future improvements include additional conversion types such as HTML to PDF and Excel conversions.
 
-The following converters are planned for future implementation:
+## Demo
 
-- **HTML to PDF**
-- **Excel to DOCX**
-- **Excel to PDF**
+Watch the [Software Demo Video](https://youtu.be/WVFQVa-WqDo) to see the application in action.
 
-## Troubleshooting
+## Setup
 
-### Missing NuGet Packages
-If you encounter errors related to missing packages, ensure that all required NuGet packages are installed:
-```bash
-dotnet add package iTextSharp
-dotnet add package DocumentFormat.OpenXml
-dotnet add package NPOI
-dotnet add package HtmlAgilityPack
-dotnet add package itext7.bouncy-castle-adapter
-```
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/TyroneMartin/DocumentConverterApplication
+   cd DocumentConverterApplication
+   ```
 
-Here’s the corrected version:  
+2. **Install .NET SDK**  
+   Download and install the .NET SDK from the [official .NET Downloads](https://dotnet.microsoft.com/download) page. Verify the installation by running:  
+   ```bash
+   dotnet --version
+   ```
 
-### To Start  
-To start the application, you can press the play button or run the following command in the terminal:  
-```bash
-dotnet run
-```
+3. **Install Required NuGet Packages**  
+   Restore and install the necessary NuGet packages:
+   ```bash
+   dotnet add package iTextSharp
+   dotnet add package DocumentFormat.OpenXml
+   dotnet add package NPOI
+   dotnet add package HtmlAgilityPack
+   dotnet add package itext7.bouncy-castle-adapter
+   ```
 
-### Build Errors
-If the build fails, clean and rebuild the project:
-```bash
-dotnet clean
-dotnet build
-```
+4. **Build the Project**  
+   Build the project to ensure that all dependencies are correctly implemented:
+   ```bash
+   dotnet build
+   ```
 
-### File Path Issues
-Ensure that the input and output file paths are correct and accessible. Use absolute paths if necessary.
+5. **Run the Application**  
+   Start the web application using:
+   ```bash
+   dotnet run
+   ```
+   The app will be available at [http://localhost:5000](http://localhost:5000).
 
-## Development Environment
+## Web Application Workflow
 
-- **.NET SDK**: For building and running the application.
-- **Visual Studio Code**: A lightweight code editor with C# support.
-- **Git**: Version control system for managing the codebase.
-- **NuGet**: Package manager for .NET.
+- **File Upload & Conversion:**  
+  Users upload a file and select a conversion type via the web form. The server processes the file using the appropriate converter (invoked via the `ConverterFactory`), saves the converted output in the `wwwroot/downloads` folder on the host machine, and provides a download link.
 
-## Tech Stack
+- **File Storage:**  
+  The converted files are stored on the server (host machine) under `wwwroot/downloads`. They remain on the server until downloaded by the user or removed via a cleanup process.
 
-- **C#**: Primary programming language.
-- **.NET**: Framework for building the application.
-- **iTextSharp**: Library for PDF manipulation.
-- **DocumentFormat.OpenXml**: Microsoft's library for working with Office documents.
-- **NPOI**: Library for Excel manipulation.
-- **HtmlAgilityPack**: Library for HTML parsing and manipulation.
+## Technologies & Tools
+
+- **Backend Framework:**  
+  ASP.NET Core with MVC architecture for a robust and scalable web application.
+
+- **Programming Language:**  
+  C#
+
+- **Key Libraries:**  
+  - **iTextSharp / iText7:** For PDF conversion and manipulation.  
+  - **DocumentFormat.OpenXml:** For working with DOCX files and other Office formats.  
+  - **NPOI:** For Excel file creation and manipulation.  
+  - **HtmlAgilityPack:** For parsing and converting HTML content.
+
+- **Client-Side Technologies:**  
+  HTML, CSS, and JavaScript for the web interface. (Optional: JavaScript-based conversion libraries can be integrated in the future for client-side processing.)
+
+- **Development Environment:**  
+  - **.NET SDK:** For building and running the application.  
+  - **Visual Studio Code:** Lightweight editor with C# support.  
+  - **Git:** Version control for managing the codebase.  
+  - **NuGet:** Package manager for .NET dependencies.
 
 ## Features
 
-- **File input and output**: Improve the user experience by specifying input and output file paths.
-- **Command-line interface**: Create a easy-to-use interface for running conversions.
-- **Multi-Format Support**: Convert between DOCX, PDF, HTML, and Excel formats.
-- **Flexible Conversion**: Supports both single and batch conversions.
-- **Error Handling**: Robust error handling for invalid inputs or unsupported formats,etc.
-- **Extensible Architecture**: Easily add new converters by extending the `DocumentConverter` base class.
+- **User-Friendly Interface:**  
+  A clean and responsive web interface for file upload, conversion, and download.
 
-## Requirements
+- **Multi-Format Support:**  
+  Convert between DOCX, PDF, HTML, and Excel formats.
 
-- **.NET SDK 6.0 or higher**: Required for building and running the application.
-- **NuGet**: For managing dependencies.
-- **Supported Formats**: `Please note:` Input files must be in a supported format (DOCX, PDF, HTML, Excel).
+- **Server-Side Conversion:**  
+  Conversion operations are performed on the server using reliable libraries, with the output stored in the `wwwroot/downloads` folder.
 
-## Useful Websites
+- **Robust Error Handling:**  
+  Detailed logging and error messages are provided via console output and user notifications.
 
-- **.NET Documentation**: [https://docs.microsoft.com/en-us/dotnet/](https://docs.microsoft.com/en-us/dotnet/)
-- **iTextSharp Documentation**: [https://itextpdf.com/](https://itextpdf.com/)
-- **Open XML SDK Documentation**: [https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk](https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk)
-- **NPOI Documentation**: [https://github.com/nissl-lab/npoi](https://github.com/nissl-lab/npoi)
-- **HtmlAgilityPack Documentation**: [https://html-agility-pack.net/](https://html-agility-pack.net/)
+- **Extensible Architecture:**  
+  New converters can be added easily by extending the `DocumentConverter` base class.
+
+## Troubleshooting
+
+### Form Submission Issues
+
+- **Ensure Model Binding:**  
+  Verify that the file input and conversion selection use the correct `asp-for` attributes so that the model is populated when the form is submitted.
+
+- **Check Folder Permissions:**  
+  The `wwwroot/downloads` folder must exist on the host machine, and the application must have write permissions to this folder.
+
+### HTTPS Redirection Warning
+
+If you see a warning like:  
+```
+Failed to determine the https port for redirect.
+```
+This occurs when the HTTPS redirection middleware cannot determine the HTTPS port. You can:
+- Configure HTTPS in your `launchSettings.json`, or
+- Disable HTTPS redirection (remove or comment out `app.UseHttpsRedirection()` in `Startup.cs`) during local development.
+
+### Build and Runtime Errors
+
+- **Clean and Rebuild:**  
+  If you encounter build errors, run:
+  ```bash
+  dotnet clean
+  dotnet build
+  ```
+- **Check Console Logs:**  
+  The application logs (via `Console.WriteLine` and ILogger) provide insights into the conversion process and any errors encountered.
+
+## Useful Websites & References
+
+- **.NET Documentation:** [https://docs.microsoft.com/en-us/dotnet/](https://docs.microsoft.com/en-us/dotnet/)
+- **iTextSharp Documentation:** [https://itextpdf.com/](https://itextpdf.com/)
+- **Open XML SDK Documentation:** [https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk](https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk)
+- **NPOI GitHub Repository:** [https://github.com/nissl-lab/npoi](https://github.com/nissl-lab/npoi)
+- **HtmlAgilityPack:** [https://html-agility-pack.net/](https://html-agility-pack.net/)
 
 ## Time Spent
 
-- **Development**: 25-30 hours
-- **Testing and Debugging**: 5-10 hours
-- **Documentation**: 2-3 hours
+- **Development:** 25-30 hours  
+- **Testing and Debugging:** 5-10 hours  
+- **Documentation:** 2-3 hours
