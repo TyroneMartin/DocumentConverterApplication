@@ -1,11 +1,6 @@
-Below is an updated README.md tailored for your ASP.NET Core document converter web‑app. It details the web‑focused workflow, the technologies used, setup instructions, troubleshooting tips, and useful reference links.
-
----
-
-```markdown
 # Document Converter Web Application
 
-A web‑based application built with ASP.NET Core for converting documents between various formats—such as DOCX, PDF, HTML, and Excel. The application leverages powerful libraries like iTextSharp, Open XML SDK, NPOI, and HtmlAgilityPack on the server side, while also providing a modern web interface for file uploads and downloads.
+A web‑based application built with ASP.NET Core for converting documents between various formats—such as DOCX, PDF, HTML, and Excel. The application leverages powerful libraries like iTextSharp, Open XML SDK, NPOI, and HtmlAgilityPack on the server side, while also providing a modern user interface for file uploads and downloads.
 
 ## Overview
 
@@ -70,7 +65,7 @@ Watch the [Software Demo Video](https://youtu.be/WVFQVa-WqDo) to see the applica
 ## Web Application Workflow
 
 - **File Upload & Conversion:**  
-  Users upload a file and select a conversion type via the web form. The server processes the file using the appropriate converter (invoked via the `ConverterFactory`), saves the converted output in the `wwwroot/downloads` folder on the host machine, and provides a download link.
+  Users upload a file and select a conversion type via the web form. The server processes the file using the appropriate converter (invoked via the `ConverterFactory`), saves the converted output in the `wwwroot/downloads` folder on the user or host machine, and then provides a download link.
 
 - **File Storage:**  
   The converted files are stored on the server (host machine) under `wwwroot/downloads`. They remain on the server until downloaded by the user or removed via a cleanup process.
@@ -115,26 +110,6 @@ Watch the [Software Demo Video](https://youtu.be/WVFQVa-WqDo) to see the applica
 - **Extensible Architecture:**  
   New converters can be added easily by extending the `DocumentConverter` base class.
 
-## Troubleshooting
-
-### Form Submission Issues
-
-- **Ensure Model Binding:**  
-  Verify that the file input and conversion selection use the correct `asp-for` attributes so that the model is populated when the form is submitted.
-
-- **Check Folder Permissions:**  
-  The `wwwroot/downloads` folder must exist on the host machine, and the application must have write permissions to this folder.
-
-### HTTPS Redirection Warning
-
-If you see a warning like:  
-```
-Failed to determine the https port for redirect.
-```
-This occurs when the HTTPS redirection middleware cannot determine the HTTPS port. You can:
-- Configure HTTPS in your `launchSettings.json`, or
-- Disable HTTPS redirection (remove or comment out `app.UseHttpsRedirection()` in `Startup.cs`) during local development.
-
 ### Build and Runtime Errors
 
 - **Clean and Rebuild:**  
@@ -143,12 +118,13 @@ This occurs when the HTTPS redirection middleware cannot determine the HTTPS por
   dotnet clean
   dotnet build
   ```
-- **Check Console Logs:**  
-  The application logs (via `Console.WriteLine` and ILogger) provide insights into the conversion process and any errors encountered.
 
 ## Useful Websites & References
 
 - **.NET Documentation:** [https://docs.microsoft.com/en-us/dotnet/](https://docs.microsoft.com/en-us/dotnet/)
+
+- **ASP.NET Core** [https://dotnet.microsoft.com/en-us/apps/aspnet](https://dotnet.microsoft.com/en-us/apps/aspnet)
+
 - **iTextSharp Documentation:** [https://itextpdf.com/](https://itextpdf.com/)
 - **Open XML SDK Documentation:** [https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk](https://learn.microsoft.com/en-us/office/open-xml/open-xml-sdk)
 - **NPOI GitHub Repository:** [https://github.com/nissl-lab/npoi](https://github.com/nissl-lab/npoi)
@@ -156,6 +132,6 @@ This occurs when the HTTPS redirection middleware cannot determine the HTTPS por
 
 ## Time Spent
 
-- **Development:** 25-30 hours  
-- **Testing and Debugging:** 5-10 hours  
+- **Development:** 40 hours  
+- **Testing and Debugging:** 10 hours  
 - **Documentation:** 2-3 hours

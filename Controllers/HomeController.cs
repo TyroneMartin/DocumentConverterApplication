@@ -35,6 +35,7 @@ namespace DocumentConverterApplication.Controllers
         [HttpPost]
         public IActionResult ConvertDocument(ConverterViewModel model)
         {
+
             Console.WriteLine("ConvertDocument action invoked.");
 
             if (!ModelState.IsValid || model.UploadedFile == null || string.IsNullOrEmpty(model.SelectedConverter))
