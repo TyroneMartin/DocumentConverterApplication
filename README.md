@@ -67,9 +67,6 @@ Watch the [Software Demo Video](https://youtu.be/WVFQVa-WqDo) to see the applica
 - **File Upload & Conversion:**  
   Users upload a file and select a conversion type via the web form. The server processes the file using the appropriate converter (invoked via the `ConverterFactory`), saves the converted output in the `wwwroot/downloads` folder on the user or host machine, and then provides a download link.
 
-- **File Storage:**  
-  The converted files are stored on the server (host machine) under `wwwroot/downloads`. They remain on the server until downloaded by the user or removed via a cleanup process.
-
 ## Technologies & Tools
 
 - **Backend Framework:**  

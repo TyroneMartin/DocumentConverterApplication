@@ -9,10 +9,8 @@ namespace DocumentConverterApplication.Controllers
 {
     public class HomeController : Controller
     {
-        // Declare a private field for the temp file service.
         private readonly ITempFileService _tempFileService;
 
-        // Constructor injection for the temp file service.
         public HomeController(ITempFileService tempFileService)
         {
             _tempFileService = tempFileService;
