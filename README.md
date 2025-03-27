@@ -23,13 +23,13 @@ Future improvements include additional conversion types such as HTML to PDF and 
 
 ## Demo
 
-Watch the [Software Demo Video](https://youtu.be/WVFQVa-WqDo) to see the application in action.
+Watch the [Software Demo Video](https://youtu.be/xak_nWKv334) to see the application in action.
 
 ## Setup
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/TyroneMartin/DocumentConverterApplication
+   git clone https://github.com/TyroneMartin/DocumentConverterApplication/tree/feature/document-converter-web-app
    cd DocumentConverterApplication
    ```
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DocumentConverterApplication.Services;
 using Microsoft.AspNetCore.Http.Features;
+using System.IO;
 
 namespace DocumentConverterApplication
 {
@@ -19,20 +20,23 @@ namespace DocumentConverterApplication
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Increase the file upload size limit
-            services.Configure<FormOptions>(options =>
-            {
-                options.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
-            });
-
-            // Add logging
-            services.AddLogging();
-
             // Add support for MVC
             services.AddControllersWithViews();
 
-            // Register your services
+            // Configure detailed file upload limits
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 20 * 1024 * 1024; // 20MB total file size
+                options.MemoryBufferThreshold = 2 * 1024 * 1024; // 2MB memory buffer
+                options.ValueLengthLimit = int.MaxValue; // Maximum value length
+                options.MultipartBoundaryLengthLimit = int.MaxValue; // Maximum boundary length
+                options.MultipartHeadersCountLimit = int.MaxValue; // Maximum headers count
+                options.MultipartHeadersLengthLimit = int.MaxValue; // Maximum headers length
+            });
+
+            // Register services
             services.AddScoped<ITempFileService, TempFileService>();
+            services.AddLogging(); // Add logging
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,8 +54,11 @@ namespace DocumentConverterApplication
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            // Ensure downloads directory exists
+            var downloadsPath = Path.Combine(env.WebRootPath, "downloads");
+            Directory.CreateDirectory(downloadsPath);
 
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

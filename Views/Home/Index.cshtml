@@ -44,29 +44,18 @@
                     <h5 class="mb-0">Convert Your Document</h5>
                 </div>
                 <div class="card-body">
-                    <form id="conversionForm" action="/Home/ConvertDocument" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                        <!-- File Upload -->
-                        <div class="mb-4 text-center">
-                            <label for="fileUpload" class="form-label">Upload Your Document</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" asp-for="UploadedFile" class="form-control-file" id="fileUpload" style="display: none;">
-                                <button type="button" class="btn btn-outline-primary btn-lg" onclick="document.getElementById('fileUpload').click()">
-                                    <i class="bi bi-upload"></i> Choose File
-                                </button>
-                                <span id="fileName" class="ml-2">No file chosen</span>
-                            </div>
-                            <div class="form-text" id="fileTypeHelp">
-                                Please upload a file that matches your selected conversion.
-                            </div>
+                    <form asp-action="ConvertDocument" asp-controller="Home" method="post" enctype="multipart/form-data" id="conversionForm">
+                        <div class="form-group mb-3">
+                            <label asp-for="UploadedFile" class="form-label">Upload File</label>
+                            <input asp-for="UploadedFile" type="file" class="form-control" id="fileUpload" />
+                            <small id="fileTypeHelp" class="form-text text-muted">Select a file to convert</small>
+                            <span asp-validation-for="UploadedFile" class="text-danger"></span>
                         </div>
-
-                        <!-- Converter Selection -->
-                        <div class="mb-4">
-                            <label class="form-label">Select Conversion Type</label>
-                            <select asp-for="SelectedConverter" class="form-select" id="conversionSelect">
-                                <option value="">Select conversion...</option>
+                    
+                        <div class="form-group mb-3">
+                            <label asp-for="SelectedConverter" class="form-label">Convert To</label>
+                            <select asp-for="SelectedConverter" class="form-control" id="conversionSelect">
+                                <option value="">-- Select Conversion Type --</option>
                                 @foreach (var category in Model.AvailableConverters)
                                 {
                                     <optgroup label="@category.Key">
@@ -80,20 +69,36 @@
                             <span asp-validation-for="SelectedConverter" class="text-danger"></span>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg" id="convertButton">
-                                <i class="bi bi-arrow-repeat"></i> Convert Document
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-primary">Convert</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @if (Model.ConversionResult != null && Model.ConversionResult.Success)
+    {
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Conversion Successful</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Input File: @Model.ConversionResult.InputFileName</p>
+                        <p>Converter: @Model.ConversionResult.ConverterType</p>
+                        <a href="@Model.ConversionResult.OutputFilePath" class="btn btn-success" download>
+                            Download Converted File
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
         // Change help text based on selected converter
         document.getElementById('conversionSelect').addEventListener('change', function () {
@@ -112,16 +117,6 @@
                 helpText.textContent = 'Please upload a .csv file';
             } else {
                 helpText.textContent = 'Please upload a file that matches your selected conversion';
-            }
-        });
-
-        // Update file name display when a file is selected
-        document.getElementById('fileUpload').addEventListener('change', function () {
-            const fileNameDisplay = document.getElementById('fileName');
-            if (this.files.length > 0) {
-                fileNameDisplay.textContent = this.files[0].name;
-            } else {
-                fileNameDisplay.textContent = 'No file chosen';
             }
         });
 
@@ -146,6 +141,8 @@
                 requiredExt = '.xlsx';
             } else if (converterValue.includes('csv')) {
                 requiredExt = '.csv';
+            } else if (converterValue.includes('txt')) {
+                requiredExt = '.txt';
             }
 
             if (requiredExt && !filePath.endsWith(requiredExt)) {
